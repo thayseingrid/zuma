@@ -1,7 +1,3 @@
-#include <iostream>
-
-using namespace std;
-
 template <class T>
 class cel {
     public:
@@ -28,7 +24,6 @@ class lista {
             cel<T>* novo;
             novo = new cel<T> ();
         
-            novo->conteudo = d;
             novo->prox = cab->prox;
             novo->ant = cab;
             cab->prox = novo;
@@ -42,33 +37,7 @@ class lista {
             novo = new cel<T> ();
 
             novo->conteudo = d;
-            novo->prox = cab;
-            novo->ant = cab->ant;
-            cab->ant->prox = novo;
-            cab->ant = novo;
             tam += 1;
-        }
-
-        void remove_frente() {
-            cel<T>* tmp;
-            tmp = cab->prox;
-
-            if (eh_vazia() == false) {
-                cab->prox = tmp->prox;                
-                tmp->prox->ant = cab;
-                delete tmp; 
-            }
-        }
-
-        void remove_atras() {
-            cel<T>* tmp;
-            tmp = cab->ant;
-
-            if (eh_vazia() == false) {
-               cab->ant = tmp->ant;
-               tmp->ant->prox = cab;
-               delete tmp; 
-            }
         }
 
         bool eh_vazia() {
@@ -83,18 +52,12 @@ class lista {
             ptr = cab->prox;
 
             while (ptr != cab) {
-                cout << ptr->conteudo;
-                cout << " ";
+                cout << prt->conteudo;
                 ptr = ptr->prox;
             }
-
-            cout << endl;
         }
 
         ~lista() {
-            while (!eh_vazia()) {
-                remove_frente();
-            }
             delete cab;
         }
 };
@@ -106,13 +69,9 @@ int main() {
     
     while (num != 0) {
         cin >> num;
-        Lista.inserir_atras(num);
+        Lista.inserir_frente(num);
     }
 
-    while (!Lista.eh_vazia()) {
-        Lista.print();
-        Lista.remove_frente();
-    }
     Lista.print();
     return 0;
 }
