@@ -78,6 +78,21 @@ class lista {
                 return false;
         }
 
+        int achar(const T& d) {
+            int cont = -1;
+            cel<T>* tmp;
+            tmp = cab->prox;
+
+            while (tmp != cab) {
+                cont += 1;
+                if (tmp->conteudo == d) {
+                    return cont; 
+                }        
+                tmp = tmp->prox;
+            }
+            return cont;
+        }
+
         void print() {
             cel<T>* ptr;
             ptr = cab->prox;
@@ -108,11 +123,8 @@ int main() {
         cin >> num;
         Lista.inserir_atras(num);
     }
-
-    while (!Lista.eh_vazia()) {
-        Lista.print();
-        Lista.remove_frente();
-    }
+    
+    cout << "posicao: " << Lista.achar(0) << endl;
     Lista.print();
     return 0;
 }
