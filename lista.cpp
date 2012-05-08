@@ -70,7 +70,51 @@ class lista {
                delete tmp; 
             }
         }
-
+        
+        void remove(int pos) {
+           cel<T>* ptr1;
+           cel<T>* ptr2;
+           ptr1 = cab;
+           ptr2 = cab->prox;
+        
+           if (!eh_vazia()) {
+              while (ptr2 != cab) {
+                 if (pos == cab) {
+                    ptr2->ant->prox = ptr2->prox;
+                    ptr2->prox->ant = ptr2->ant;
+                 }
+                 ptr1 = ptr1->prox;
+                 ptr2 = ptr2->prox;
+              }
+              delete ptr2;
+              tam -= 1;
+           }
+        }
+        
+        void insere (int pos, T d) {
+           cel<T>* ptr1;
+           cel<T>* ptr2;
+           cel<T>* novo;
+           ptr1 = cab;
+           ptr2 = cab->prox;
+           novo = new cel<T>;
+           int cont = 0;
+        
+           while (ptr2 != cab) {
+              if (cont == pos) {
+                 novo->conteudo = d;
+                 novo->prox = ptr2;
+                 novo->ant = ptr1;
+                 ptr1->prox = novo;
+                 ptr2->ant = novo;
+              }
+              ++cont; 
+           }
+           ptr1 = ptr1->prox;
+           ptr2 = ptr2->prox;
+           tam += 1;
+        }
+                    
         bool eh_vazia() {
             if (cab->prox == cab && cab->ant == cab) 
                 return true;
@@ -128,8 +172,3 @@ int main() {
     Lista.print();
     return 0;
 }
-
-
-jjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
-
-
