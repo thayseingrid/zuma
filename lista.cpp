@@ -1,174 +1,175 @@
-#include <iostream>
+#include "lista.h"
+using namespace Lista;
 
-using namespace std;
+	template <class T>
+	lista<T>::lista() {
+		cab = new cel<T> ();
+		tam = 0;
+		cab->prox = cab;
+		cab->ant = cab;
 
-template <class T>
-class cel {
-    public:
-        T conteudo;
-        cel* prox;
-        cel* ant;
-};
+	}
+	
+	template <class T>
+	void lista<T>::inserir_frente(const T& d) {
+		cel<T>* novo;
+		novo = new cel<T> ();
+   
+		novo->conteudo = d;
+		novo->prox = cab->prox;
+		novo->ant = cab;
+		cab->prox = novo;
+		novo->prox->ant = novo;
 
-template <class T>
-class lista {
-    private:
-        cel<T>* cab;
-        int tam;
+		tam += 1;
+	}
+	
+	template <class T>
+	void lista<T>::inserir_atras(const T& d) {
+		cel<T>* novo;
+		novo = new cel<T> ();
 
-    public:
-        lista() {
-            cab = new cel<T> ();
-            tam = 0;
-            cab->prox = cab;
-            cab->ant = cab;
-        }
+		novo->conteudo = d;
+		novo->prox = cab;
+		novo->ant = cab->ant;
+		cab->ant->prox = novo;
+		cab->ant = novo;
+		tam += 1;
+	}
+	
+	template <class T>
+	void lista<T>::insere(int pos, const T& d) {
+			if (eh_vazia()) {
+					inserir_frente(d);
+			}
+			else if(!eh_vazia() && pos == tam) {
+					inserir_atras(d);
+			}
+			else if (!eh_vazia()) {
+				   
+					cel<T>* novo;
+					cel<T>* ptr1;
+					cel<T>* ptr2;
+					ptr1 = cab;
+					ptr2 = cab->prox;
+					novo = new cel<T> ();
+					int cont = 0;
 
-        void inserir_frente(const T& d) {
-            cel<T>* novo;
-            novo = new cel<T> ();
-        
-            novo->conteudo = d;
-            novo->prox = cab->prox;
-            novo->ant = cab;
-            cab->prox = novo;
-            novo->prox->ant = novo;
+					novo->conteudo = d;
+					while (ptr2 != cab) {
+							if(cont == pos) {
+									novo->prox = ptr2;
+									novo->ant = ptr1;
+									ptr1->prox = novo;
+									ptr2->ant = novo;
+							}
+				   
+							cont += 1;     
+							ptr1 = ptr1->prox;
+							ptr2 = ptr2->prox;
+					}
+					tam += 1;
+			}                      
+   
+	}
 
-            tam += 1;
-        } 
+	template <class T>
+	void lista<T>::remove_frente() {
+		cel<T>* tmp;
+		tmp = cab->prox;
 
-        void inserir_atras(const T& d) {
-            cel<T>* novo;
-            novo = new cel<T> ();
+		if (eh_vazia() == false) {
+			cab->prox = tmp->prox;
+			tmp->prox->ant = cab;
+			delete tmp;
+		}
+	}
 
-            novo->conteudo = d;
-            novo->prox = cab;
-            novo->ant = cab->ant;
-            cab->ant->prox = novo;
-            cab->ant = novo;
-            tam += 1;
-        }
+	template <class T>
+	void lista<T>::remove_atras() {
+		cel<T>* tmp;
+		tmp = cab->ant;
 
-        void remove_frente() {
-            cel<T>* tmp;
-            tmp = cab->prox;
+		if (eh_vazia() == false) {
+		   cab->ant = tmp->ant;
+		   tmp->ant->prox = cab;
+		   delete tmp;
+		}
+	}
 
-            if (eh_vazia() == false) {
-                cab->prox = tmp->prox;                
-                tmp->prox->ant = cab;
-                delete tmp; 
-            }
-        }
+	template <class T>
+	void lista<T>::remover(int pos) {
+			cel<T>* tmp;
+			int cont = 0;
+			tmp = cab->prox;
+			if(!eh_vazia()) {
+					while(tmp != cab && pos != cont) {
+							tmp = tmp->prox;
+							cont += 1;
+					}
+					if(pos == cont) {
+							tmp->ant->prox = tmp->prox;
+							tmp->prox->ant = tmp->ant;
+							delete tmp;
+							tam -= 1;
+					}
+			}
+	}
 
-        void remove_atras() {
-            cel<T>* tmp;
-            tmp = cab->ant;
+	template <class T>
+	bool lista<T>::eh_vazia() {
+		if (cab->prox == cab && cab->ant == cab)
+			return true;
+		else
+			return false;
+	}
 
-            if (eh_vazia() == false) {
-               cab->ant = tmp->ant;
-               tmp->ant->prox = cab;
-               delete tmp; 
-            }
-        }
-        
-        void remove(int pos) {
-           cel<T>* ptr1;
-           cel<T>* ptr2;
-           ptr1 = cab;
-           ptr2 = cab->prox;
-        
-           if (!eh_vazia()) {
-              while (ptr2 != cab) {
-                 if (pos == cab) {
-                    ptr2->ant->prox = ptr2->prox;
-                    ptr2->prox->ant = ptr2->ant;
-                 }
-                 ptr1 = ptr1->prox;
-                 ptr2 = ptr2->prox;
-              }
-              delete ptr2;
-              tam -= 1;
-           }
-        }
-        
-        void insere (int pos, T d) {
-           cel<T>* ptr1;
-           cel<T>* ptr2;
-           cel<T>* novo;
-           ptr1 = cab;
-           ptr2 = cab->prox;
-           novo = new cel<T>;
-           int cont = 0;
-        
-           while (ptr2 != cab) {
-              if (cont == pos) {
-                 novo->conteudo = d;
-                 novo->prox = ptr2;
-                 novo->ant = ptr1;
-                 ptr1->prox = novo;
-                 ptr2->ant = novo;
-              }
-              ++cont; 
-           }
-           ptr1 = ptr1->prox;
-           ptr2 = ptr2->prox;
-           tam += 1;
-        }
-                    
-        bool eh_vazia() {
-            if (cab->prox == cab && cab->ant == cab) 
-                return true;
-            else
-                return false;
-        }
+	template <class T>
+	void lista<T>::print() {
+		cel<T>* ptr;
+		ptr = cab->prox;
+		while (ptr != cab) {
+			cout << ptr->conteudo;
+			cout << " ";
+			ptr = ptr->prox;
+		}
 
-        int achar(const T& d) {
-            int cont = -1;
-            cel<T>* tmp;
-            tmp = cab->prox;
+		cout << endl;
+	}
 
-            while (tmp != cab) {
-                cont += 1;
-                if (tmp->conteudo == d) {
-                    return cont; 
-                }        
-                tmp = tmp->prox;
-            }
-            return cont;
-        }
+	template <class T>
+	void lista<T>::setData(int i, T& d) {
+		cel<T>* tmp = cab->prox;
 
-        void print() {
-            cel<T>* ptr;
-            ptr = cab->prox;
+		while (i != 0) {
+			tmp = tmp->prox;
+			i = i - 1;
+		}
 
-            while (ptr != cab) {
-                cout << ptr->conteudo;
-                cout << " ";
-                ptr = ptr->prox;
-            }
+		tmp->conteudo = d;
+	}
 
-            cout << endl;
-        }
+	template <class T>
+	T& lista<T>::getData(int pos) {
+		cel<T>* tmp;
+		tmp = cab->prox;
+		while (pos != 0) {
+			tmp = tmp->prox;
+			--pos;
+		}
+		return tmp->conteudo;
+	}      
 
-        ~lista() {
-            while (!eh_vazia()) {
-                remove_frente();
-            }
-            delete cab;
-        }
-};
+	template <class T>
+	lista<T>::~lista() {
+		while (!eh_vazia()) {
+			remove_frente();
+		}
+		delete cab;
+	}
 
+	template <class T>
+	int lista<T>::getTamanho() {
+			return tam;
+	}
 
-int main() {
-    int num = 1;
-    lista<int> Lista;
-    
-    while (num != 0) {
-        cin >> num;
-        Lista.inserir_atras(num);
-    }
-    
-    cout << "posicao: " << Lista.achar(0) << endl;
-    Lista.print();
-    return 0;
-}
